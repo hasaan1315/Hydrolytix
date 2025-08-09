@@ -42,7 +42,7 @@ app.layout = html.Div([
             className="dropdown",
             style={'width': '200px'}
         ),
-        dbc.Button("Toggle Sidebar", id="toggle-sidebar", color="primary", outline=True, size="sm", style={"margin": "10px"}),
+        # Removed toggle button here
         html.Label("Select City:"),
         dcc.Dropdown(
             id='city-dropdown',
@@ -51,7 +51,7 @@ app.layout = html.Div([
             placeholder="All cities",
             clearable=True,
             className="dropdown",
-            style={'width': '180px'}
+            style={'width': '200px'}
         ),
     ], className="sidebar", id="sidebar"),
 
@@ -77,19 +77,21 @@ app.layout = html.Div([
     ], className="content-wrapper", id="content-wrapper")  # content-wrapper ends
 ])
 
-from dash.dependencies import State
+# Removed toggle_sidebar callback and related imports
 
-@app.callback(
-    Output("sidebar", "className"),
-    Input("toggle-sidebar", "n_clicks"),
-    State("sidebar", "className"),
-    prevent_initial_call=True
-)
-def toggle_sidebar(n_clicks, current_class):
-    if current_class and "collapsed" in current_class:
-        return "sidebar"
-    else:
-        return "sidebar collapsed"
+# from dash.dependencies import State
+
+# @app.callback(
+#     Output("sidebar", "className"),
+#     Input("toggle-sidebar", "n_clicks"),
+#     State("sidebar", "className"),
+#     prevent_initial_call=True
+# )
+# def toggle_sidebar(n_clicks, current_class):
+#     if current_class and "collapsed" in current_class:
+#         return "sidebar"
+#     else:
+#         return "sidebar collapsed"
 
 # Callback for Bar Chart
 @app.callback(
@@ -114,6 +116,13 @@ def update_bar_chart(selected_week, selected_city):
     )
     fig.update_layout(margin=dict(l=20, r=20, t=40, b=20))
     return fig
+
+# Remove the circular dependency callbacks to avoid infinite loop errors
+
+# The previous callbacks resetting dropdown values caused circular dependency errors.
+# Instead, we will rely on CSS fixes and user interaction to manage dropdown visibility.
+
+# If needed, we can explore alternative UI components or JavaScript solutions for better dropdown control.
 
 # Callback for Summary Cards
 @app.callback(
